@@ -614,10 +614,60 @@
          line under the name, and the logo badge breathes with a soft
          pulse. All of it switches off under prefers-reduced-motion. */
 
-      /* Panel gradients are completely still on purpose: About Me, What I
-         Create and Contact all keep their gradient panels, but nothing in
-         them moves or changes colour — no drift anywhere on the page. */
-      #about, #create, #contact { animation: none; }
+      /* Soft blinking glow on every coloured text panel: About Me, What I
+         Create and My Details & Contact keep their exact same colours —
+         only the light around them gently swells and fades, like a slow
+         blink of glow. The inner text cards (About card, the AI Video and
+         Kids & Fun cards, and the contact rows) pulse with the same soft
+         glow so the whole text area feels alive. Slow and gentle on
+         purpose, and fully off under prefers-reduced-motion below. */
+      #about   { animation: panel-blink-about 3.4s ease-in-out infinite; }
+      #create  { animation: panel-blink-create 3.4s ease-in-out 0.55s infinite; }
+      #contact { animation: panel-blink-contact 3.4s ease-in-out 1.1s infinite; }
+      @keyframes panel-blink-about {
+        0%, 100% {
+          border-color: rgba(229, 172, 46, 0.45);
+          box-shadow: 0 24px 48px -20px rgba(58, 44, 7, 0.55), 0 0 0 0 rgba(242, 188, 69, 0);
+        }
+        50% {
+          border-color: rgba(242, 188, 69, 0.95);
+          box-shadow: 0 24px 48px -20px rgba(58, 44, 7, 0.55), 0 0 38px 6px rgba(242, 188, 69, 0.5);
+        }
+      }
+      @keyframes panel-blink-create {
+        0%, 100% {
+          border-color: rgba(229, 172, 46, 0.45);
+          box-shadow: 0 24px 48px -20px rgba(7, 51, 46, 0.55), 0 0 0 0 rgba(94, 234, 212, 0);
+        }
+        50% {
+          border-color: rgba(94, 234, 212, 0.85);
+          box-shadow: 0 24px 48px -20px rgba(7, 51, 46, 0.55), 0 0 38px 6px rgba(94, 234, 212, 0.38), 0 0 22px 2px rgba(242, 188, 69, 0.3);
+        }
+      }
+      @keyframes panel-blink-contact {
+        0%, 100% {
+          border-color: rgba(229, 172, 46, 0.45);
+          box-shadow: 0 24px 48px -20px rgba(10, 42, 26, 0.55), 0 0 0 0 rgba(242, 188, 69, 0);
+        }
+        50% {
+          border-color: rgba(242, 188, 69, 0.95);
+          box-shadow: 0 24px 48px -20px rgba(10, 42, 26, 0.55), 0 0 38px 6px rgba(242, 188, 69, 0.48);
+        }
+      }
+      /* The cards that carry the text blink softly too */
+      .about-card, .create-card, .contact-item {
+        animation: card-blink-glow 3.4s ease-in-out infinite;
+      }
+      .create-card:nth-child(2) { animation-delay: 0.55s; }
+      .contact-item:nth-child(2) { animation-delay: 0.3s; }
+      .contact-item:nth-child(3) { animation-delay: 0.6s; }
+      .contact-item:nth-child(4) { animation-delay: 0.9s; }
+      .contact-item:nth-child(5) { animation-delay: 1.2s; }
+      .contact-item:nth-child(6) { animation-delay: 1.5s; }
+      @keyframes card-blink-glow {
+        0%, 100% { box-shadow: var(--shadow), 0 0 0 0 rgba(229, 172, 46, 0); }
+        50%      { box-shadow: var(--shadow), 0 0 22px 3px rgba(229, 172, 46, 0.4); }
+      }
 
       /* Cards rise one after another once their section is in view.
          Driven by the same .in class the reveal script already adds,
@@ -625,7 +675,7 @@
       .js .reveal.in .about-card,
       .js .reveal.in .create-card,
       .js .reveal.in .contact-item {
-        animation: card-rise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+        animation: card-rise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) backwards, card-blink-glow 3.4s ease-in-out infinite;
       }
       .js .reveal.in .create-card:nth-child(2) { animation-delay: 0.13s; }
       .js .reveal.in .contact-item:nth-child(2) { animation-delay: 0.07s; }
@@ -679,12 +729,296 @@
 
       @media (prefers-reduced-motion: reduce) {
         #about, #create, #contact,
+        .about-card, .create-card, .contact-item,
         .js .reveal.in .about-card,
         .js .reveal.in .create-card,
         .js .reveal.in .contact-item,
         .social-btn,
         .hero-photo .logo-badge { animation: none; }
         .name-rule::after { display: none; }
+      }
+
+      /* ---------- Golden blink directly on the text ----------
+         The panel glow above stays as it was — this adds a soft golden
+         shimmer to the letters themselves: his name, every section
+         heading and the two card titles. The glow slowly swells and
+         fades so the eye catches it, while the letter colour never
+         changes, so every word stays perfectly readable at all times. */
+      h1 { animation: text-blink-name 3.2s ease-in-out infinite; }
+      @keyframes text-blink-name {
+        0%, 100% {
+          text-shadow:
+            0 2px 18px rgba(192, 127, 14, 0.35),
+            0 0 36px rgba(242, 188, 69, 0.22);
+        }
+        50% {
+          text-shadow:
+            0 2px 30px rgba(192, 127, 14, 0.68),
+            0 0 64px rgba(242, 188, 69, 0.52),
+            0 0 14px rgba(255, 233, 168, 0.65);
+        }
+      }
+      @media (prefers-color-scheme: dark) {
+        @keyframes text-blink-name {
+          0%, 100% {
+            text-shadow:
+              0 2px 18px rgba(229, 172, 46, 0.38),
+              0 0 36px rgba(242, 188, 69, 0.25);
+          }
+          50% {
+            text-shadow:
+              0 2px 32px rgba(229, 172, 46, 0.72),
+              0 0 68px rgba(242, 188, 69, 0.55),
+              0 0 14px rgba(255, 233, 168, 0.6);
+          }
+        }
+      }
+      .sec-head h2 { animation: text-blink-heading 3.2s ease-in-out infinite; }
+      #create .sec-head h2 { animation-delay: 0.55s; }
+      #contact .sec-head h2 { animation-delay: 1.1s; }
+      @keyframes text-blink-heading {
+        0%, 100% {
+          text-shadow:
+            0 0 8px rgba(242, 188, 69, 0.28),
+            0 2px 18px rgba(229, 172, 46, 0.22);
+        }
+        50% {
+          text-shadow:
+            0 0 18px rgba(242, 188, 69, 0.85),
+            0 0 38px rgba(242, 188, 69, 0.55),
+            0 2px 24px rgba(255, 233, 168, 0.5);
+        }
+      }
+      .create-card h3 { animation: text-blink-card 3.2s ease-in-out infinite; }
+      .create-card:nth-child(2) h3 { animation-delay: 0.55s; }
+      @keyframes text-blink-card {
+        0%, 100% {
+          text-shadow:
+            0 0 6px rgba(192, 127, 14, 0.16),
+            0 0 16px rgba(242, 188, 69, 0.1);
+        }
+        50% {
+          text-shadow:
+            0 0 14px rgba(192, 127, 14, 0.55),
+            0 0 30px rgba(242, 188, 69, 0.48),
+            0 0 8px rgba(255, 233, 168, 0.55);
+        }
+      }
+      @media (prefers-color-scheme: dark) {
+        @keyframes text-blink-card {
+          0%, 100% {
+            text-shadow:
+              0 0 6px rgba(229, 172, 46, 0.2),
+              0 0 16px rgba(242, 188, 69, 0.12);
+          }
+          50% {
+            text-shadow:
+              0 0 14px rgba(229, 172, 46, 0.6),
+              0 0 30px rgba(242, 188, 69, 0.5),
+              0 0 8px rgba(255, 233, 168, 0.5);
+          }
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        h1, .sec-head h2, .create-card h3 { animation: none; }
+      }
+
+      /* ---------- What I Create cards: extra premium customisation ----------
+         AI Video (gold) and Kids & Fun (leaf) get richer gradients, a
+         glowing top bar, a soft corner light that breathes in time with
+         the text blink, gradient icon tiles with their own pulse, and a
+         gradient underline under each title. Text colours stay exactly
+         as they were, so everything remains easy to read. */
+      .create-grid .create-card {
+        position: relative;
+        overflow: hidden;
+        border-width: 1.5px;
+        padding: 30px 26px 24px;
+      }
+      .create-grid .create-card:nth-child(1) {
+        background:
+          radial-gradient(340px 200px at 108% -30px, rgba(242, 188, 69, 0.35), rgba(242, 188, 69, 0) 62%),
+          linear-gradient(165deg, #fffef9 0%, #fdf3da 58%, #fbeec3 100%);
+        border-color: rgba(192, 127, 14, 0.55);
+      }
+      .create-grid .create-card:nth-child(2) {
+        background:
+          radial-gradient(340px 200px at 108% -30px, rgba(76, 192, 124, 0.3), rgba(76, 192, 124, 0) 62%),
+          radial-gradient(260px 180px at -40px 112%, rgba(130, 194, 255, 0.22), rgba(130, 194, 255, 0) 62%),
+          linear-gradient(165deg, #fbfffc 0%, #dff1e2 58%, #d8ecf7 100%);
+        border-color: rgba(23, 114, 69, 0.5);
+      }
+      @media (prefers-color-scheme: dark) {
+        .create-grid .create-card:nth-child(1) {
+          background:
+            radial-gradient(340px 200px at 108% -30px, rgba(242, 188, 69, 0.28), rgba(242, 188, 69, 0) 62%),
+            linear-gradient(165deg, #2e260f 0%, #241c09 58%, #1c1a0c 100%);
+        }
+        .create-grid .create-card:nth-child(2) {
+          background:
+            radial-gradient(340px 200px at 108% -30px, rgba(76, 192, 124, 0.26), rgba(76, 192, 124, 0) 62%),
+            radial-gradient(260px 180px at -40px 112%, rgba(130, 194, 255, 0.14), rgba(130, 194, 255, 0) 62%),
+            linear-gradient(165deg, #14291c 0%, #10231a 58%, #0e1d26 100%);
+        }
+      }
+      /* Gradient bar across the top of each card */
+      .create-card::before {
+        content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+      }
+      .create-card:nth-child(1)::before { background: linear-gradient(90deg, #a56c05, #f2bc45 45%, #ffe9a8 70%, #e5ac2e); }
+      .create-card:nth-child(2)::before { background: linear-gradient(90deg, #12653a, #4cc07c 40%, #82c2ff 72%, #ff9ecf); }
+      /* Soft corner light breathing in time with the title blink */
+      .create-card::after {
+        content: ""; position: absolute; right: -46px; top: -46px;
+        width: 150px; height: 150px; border-radius: 50%;
+        pointer-events: none;
+        animation: create-corner-glow 3.2s ease-in-out infinite;
+      }
+      .create-card:nth-child(1)::after { background: radial-gradient(circle, rgba(242, 188, 69, 0.5), rgba(242, 188, 69, 0) 68%); }
+      .create-card:nth-child(2)::after { background: radial-gradient(circle, rgba(76, 192, 124, 0.45), rgba(76, 192, 124, 0) 68%); animation-delay: 0.55s; }
+      @keyframes create-corner-glow {
+        0%, 100% { opacity: 0.45; transform: scale(0.92); }
+        50%      { opacity: 1; transform: scale(1.12); }
+      }
+      /* Border + outer glow pulse, matched to each card's colour and
+         timed with the text blink (3.2s) */
+      .create-grid .create-card:nth-child(1) { animation: create-glow-gold 3.2s ease-in-out infinite; }
+      .create-grid .create-card:nth-child(2) { animation: create-glow-leaf 3.2s ease-in-out 0.55s infinite; }
+      .js .reveal.in .create-grid .create-card:nth-child(1) { animation: card-rise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) backwards, create-glow-gold 3.2s ease-in-out infinite; }
+      .js .reveal.in .create-grid .create-card:nth-child(2) { animation: card-rise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 0.13s backwards, create-glow-leaf 3.2s ease-in-out 0.55s infinite; }
+      @keyframes create-glow-gold {
+        0%, 100% { border-color: rgba(192, 127, 14, 0.55); box-shadow: var(--shadow), 0 0 0 0 rgba(242, 188, 69, 0); }
+        50%      { border-color: rgba(242, 188, 69, 0.95); box-shadow: var(--shadow), 0 0 30px 5px rgba(242, 188, 69, 0.5); }
+      }
+      @keyframes create-glow-leaf {
+        0%, 100% { border-color: rgba(23, 114, 69, 0.5); box-shadow: var(--shadow), 0 0 0 0 rgba(76, 192, 124, 0); }
+        50%      { border-color: rgba(76, 192, 124, 0.9); box-shadow: var(--shadow), 0 0 30px 5px rgba(76, 192, 124, 0.42), 0 0 18px 2px rgba(242, 188, 69, 0.28); }
+      }
+      /* Icon tiles: full gradient, white glyph, coloured shadow + pulse */
+      .create-card .icon {
+        width: 60px; height: 60px; border-radius: 17px; margin-bottom: 18px;
+        position: relative; z-index: 1;
+      }
+      .create-card .icon svg { width: 31px; height: 31px; }
+      .create-card:nth-child(1) .icon {
+        background: linear-gradient(140deg, #f2bc45 0%, #dd9a12 52%, #a56c05 100%);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        animation: create-icon-gold 3.2s ease-in-out infinite;
+      }
+      .create-card:nth-child(2) .icon {
+        background: linear-gradient(140deg, #57d68b 0%, #177245 55%, #0b6a5e 100%);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        animation: create-icon-leaf 3.2s ease-in-out 0.55s infinite;
+      }
+      @keyframes create-icon-gold {
+        0%, 100% { box-shadow: 0 10px 22px -8px rgba(192, 127, 14, 0.65), 0 0 0 0 rgba(242, 188, 69, 0.35); }
+        50%      { box-shadow: 0 12px 26px -8px rgba(192, 127, 14, 0.7), 0 0 0 9px rgba(242, 188, 69, 0); }
+      }
+      @keyframes create-icon-leaf {
+        0%, 100% { box-shadow: 0 10px 22px -8px rgba(23, 114, 69, 0.6), 0 0 0 0 rgba(76, 192, 124, 0.35); }
+        50%      { box-shadow: 0 12px 26px -8px rgba(23, 114, 69, 0.65), 0 0 0 9px rgba(76, 192, 124, 0); }
+      }
+      /* Titles: a touch larger, with a gradient underline highlight */
+      .create-card h3 { font-size: 1.45rem; position: relative; z-index: 1; }
+      .create-card h3::after {
+        content: ""; display: block; width: 46px; height: 4px; border-radius: 999px; margin-top: 7px;
+      }
+      .create-card:nth-child(1) h3::after { background: linear-gradient(90deg, #c07f0e, #f2bc45, rgba(242, 188, 69, 0)); box-shadow: 0 0 10px 1px rgba(242, 188, 69, 0.45); }
+      .create-card:nth-child(2) h3::after { background: linear-gradient(90deg, #177245, #4cc07c, rgba(76, 192, 124, 0)); box-shadow: 0 0 10px 1px rgba(76, 192, 124, 0.4); }
+      .create-card p, .create-card ul { position: relative; z-index: 1; }
+      .create-card ul li { box-shadow: 0 3px 8px -4px rgba(22, 33, 26, 0.25); }
+      @media (prefers-reduced-motion: reduce) {
+        .create-grid .create-card,
+        .js .reveal.in .create-grid .create-card,
+        .create-card::after,
+        .create-card:nth-child(1) .icon,
+        .create-card:nth-child(2) .icon { animation: none; }
+      }
+
+      /* ---------- About Me card: same premium customisation ----------
+         Mirrors the AI Video / Kids & Fun treatment so About Me stands
+         out just as much: a rich gold-to-leaf gradient background, a
+         glowing gradient bar across the top, a breathing corner light,
+         a blinking border + outer glow timed with the text blink
+         (3.2s), and gradient underlines under the title and the facts
+         row. Text colours stay exactly as they were — dark ink on a
+         light warm gradient (light mode) and near-white on a deep warm
+         gradient (dark mode) — so every word stays easy to read. */
+      #about .about-card {
+        position: relative;
+        overflow: hidden;
+        border-width: 1.5px;
+        padding: 30px 28px 26px;
+        background:
+          radial-gradient(380px 220px at 108% -30px, rgba(242, 188, 69, 0.38), rgba(242, 188, 69, 0) 62%),
+          radial-gradient(300px 200px at -40px 112%, rgba(76, 192, 124, 0.2), rgba(76, 192, 124, 0) 62%),
+          linear-gradient(165deg, #fffef9 0%, #fdf3da 52%, #eaf3e2 100%);
+        border-color: rgba(192, 127, 14, 0.55);
+        animation: about-glow 3.2s ease-in-out infinite;
+      }
+      @media (prefers-color-scheme: dark) {
+        #about .about-card {
+          background:
+            radial-gradient(380px 220px at 108% -30px, rgba(242, 188, 69, 0.3), rgba(242, 188, 69, 0) 62%),
+            radial-gradient(300px 200px at -40px 112%, rgba(76, 192, 124, 0.16), rgba(76, 192, 124, 0) 62%),
+            linear-gradient(165deg, #2e2812 0%, #231d0b 55%, #152416 100%);
+        }
+      }
+      .js .reveal.in #about .about-card,
+      .js .reveal.in .about-card {
+        animation: card-rise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) backwards, about-glow 3.2s ease-in-out infinite;
+      }
+      @keyframes about-glow {
+        0%, 100% { border-color: rgba(192, 127, 14, 0.55); box-shadow: var(--shadow), 0 0 0 0 rgba(242, 188, 69, 0); }
+        50%      { border-color: rgba(242, 188, 69, 0.95); box-shadow: var(--shadow), 0 0 30px 5px rgba(242, 188, 69, 0.5), 0 0 18px 2px rgba(76, 192, 124, 0.26); }
+      }
+      /* Gradient bar across the top of the About card */
+      #about .about-card::before {
+        content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+        background: linear-gradient(90deg, #a56c05, #f2bc45 38%, #ffe9a8 62%, #4cc07c);
+        z-index: 2;
+      }
+      /* Soft corner light breathing in time with the title blink */
+      #about .about-card::after {
+        content: ""; position: absolute; right: -46px; top: -46px;
+        width: 150px; height: 150px; border-radius: 50%;
+        pointer-events: none;
+        background: radial-gradient(circle, rgba(242, 188, 69, 0.5), rgba(242, 188, 69, 0) 68%);
+        animation: about-corner-glow 3.2s ease-in-out infinite;
+      }
+      @keyframes about-corner-glow {
+        0%, 100% { opacity: 0.45; transform: scale(0.92); }
+        50%      { opacity: 1; transform: scale(1.12); }
+      }
+      /* Keep all card content above the corner light */
+      #about .about-card > * { position: relative; z-index: 1; }
+      /* Gradient underline under the About Me title, matching the
+         underlines under the AI Video / Kids & Fun titles */
+      #about .sec-head h2 { position: relative; }
+      #about .sec-head h2::after {
+        content: ""; display: block; width: 52px; height: 4px; border-radius: 999px; margin-top: 7px;
+        background: linear-gradient(90deg, #c07f0e, #f2bc45 55%, #4cc07c, rgba(76, 192, 124, 0));
+        box-shadow: 0 0 10px 1px rgba(242, 188, 69, 0.45);
+      }
+      /* Gradient underline under the facts row inside the card */
+      #about .about-facts { position: relative; padding-bottom: 15px; margin-bottom: 15px; }
+      #about .about-facts::after {
+        content: ""; position: absolute; left: 0; bottom: 0;
+        width: 64px; height: 4px; border-radius: 999px;
+        background: linear-gradient(90deg, #c07f0e, #f2bc45, rgba(242, 188, 69, 0));
+        box-shadow: 0 0 10px 1px rgba(242, 188, 69, 0.45);
+      }
+      /* Chips get the same soft lift as the create-card tags */
+      #about .about-card .chips li { box-shadow: 0 3px 8px -4px rgba(22, 33, 26, 0.25); }
+      @media (max-width: 760px) {
+        #about .about-card { padding: 26px 20px 22px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #about .about-card,
+        .js .reveal.in .about-card,
+        #about .about-card::after { animation: none; }
       }
     </style>
     <script>document.documentElement.classList.add('js');</script>
